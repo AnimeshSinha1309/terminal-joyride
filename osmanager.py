@@ -1,23 +1,17 @@
+"""
+System interface to handle the Terminal.
+"""
+
 import os
 import sys
 import select
 
 
-if os.name == 'nt':
-    import msvcrt
-    import ctypes
-
-    # Registering cursor status to the MS terminal
-    class _CursorInfo(ctypes.Structure):
-        _fields_ = [("size", ctypes.c_int),
-                    ("visible", ctypes.c_byte)]
-
-elif os.name == 'posix':
-    import termios
-    import tty
-    # Changing terminal settings to break on character (getch)
-    old_settings = termios.tcgetattr(sys.stdin)
-    tty.setcbreak(sys.stdin.fileno())
+import termios
+import tty
+# Changing terminal settings to break on character (getch)
+OLD_SETTINGS = termios.tcgetattr(sys.stdin)
+tty.setcbreak(sys.stdin.fileno())
 
 
 def hide_cursor():
@@ -28,15 +22,8 @@ def hide_cursor():
     =======
     >>> hide_cursor()
     """
-    if os.name == 'nt':
-        ci = _CursorInfo()
-        handle = ctypes.windll.kernel32.GetStdHandle(-11)
-        ctypes.windll.kernel32.GetConsoleCursorInfo(handle, ctypes.byref(ci))
-        ci.visible = False
-        ctypes.windll.kernel32.SetConsoleCursorInfo(handle, ctypes.byref(ci))
-    elif os.name == 'posix':
-        sys.stdout.write("\033[?25l")
-        sys.stdout.flush()
+    sys.stdout.write("\033[?25l")
+    sys.stdout.flush()
 
 
 def show_cursor():
@@ -47,15 +34,8 @@ def show_cursor():
     =======
     >>> show_cursor()
     """
-    if os.name == 'nt':
-        ci = _CursorInfo()
-        handle = ctypes.windll.kernel32.GetStdHandle(-11)
-        ctypes.windll.kernel32.GetConsoleCursorInfo(handle, ctypes.byref(ci))
-        ci.visible = True
-        ctypes.windll.kernel32.SetConsoleCursorInfo(handle, ctypes.byref(ci))
-    elif os.name == 'posix':
-        sys.stdout.write("\033[?25h")
-        sys.stdout.flush()
+    sys.stdout.write("\033[?25h")
+    sys.stdout.flush()
 
 
 def input_available():
@@ -68,7 +48,7 @@ def input_available():
 
     Note
     ====
-    The following preparatory lines in the module load 
+    The following preparatory lines in the module load
     are crucial to the working of this method.
         old_settings = termios.tcgetattr(sys.stdin)
         tty.setcbreak(sys.stdin.fileno())
@@ -78,10 +58,7 @@ def input_available():
     >>> while not input_available():
     >>>     print('.', end='')
     """
-    if os.name == 'nt':
-        return msvcrt.kbhit()
-    elif os.name == 'posix':
-        return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
+    return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
 
 
 def getch():
@@ -99,17 +76,10 @@ def getch():
     >>>     if c != -1:
     >>>         print(c)
     """
-    if os.name == 'posix':
-        if input_available():
-            c = sys.stdin.read(1)
-            return c
-        else:
-            return -1
-    elif os.name == 'nt':
-        if msvcrt.kbhit():
-            return msvcrt.getch()
-        else:
-            return -1
+    if input_available():
+        character = sys.stdin.read(1)
+        return character
+    return -1
 
 
 def clrscr():
@@ -131,27 +101,45 @@ def sys_exit():
     =======
     >>> sys_exit()
     """
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, OLD_SETTINGS)
     show_cursor()
     exit(0)
 
 
 class LogWriter:
+    """
+    Helper class to write logs
+    """
 
     @staticmethod
     def verbose(log):
-        with open('verbose.log', 'w+') as f:
-            f.write(log)
+        """
+        Writes the verbose log file
+        :param log: string to be logged
+        :return:
+        """
+        with open('verbose.log', 'w+') as file:
+            file.write(log)
 
     @staticmethod
     def message(log):
-        with open('message.log', 'w+') as f:
-            f.write(log)
+        """
+        Writes the message log file
+        :param log: string to be logged
+        :return:
+        """
+        with open('message.log', 'w+') as file:
+            file.write(log)
 
     @staticmethod
     def error(log):
-        with open('error.log', 'w+') as f:
-            f.write(log)
+        """
+        Writes the error log file
+        :param log: string to be logged
+        :return:
+        """
+        with open('error.log', 'w+') as file:
+            file.write(log)
 
 
 if __name__ == '__main__':

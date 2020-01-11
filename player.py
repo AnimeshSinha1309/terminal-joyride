@@ -1,12 +1,16 @@
+"""
+Provides the Player class which keeps track of the position and renders
+the player object.
+"""
+
+import colorama as cl
 from person import Person
 from frame import Frame
-import colorama as cl
 
 
 class Player(Person):
     """
-    Properties
-    ==========
+    Stores the Player class with the following major properties:
     Lives: int, lives left with the player
     Score: int, score of the player
     Position: (row, col) index of the top left corner of sprite
@@ -24,29 +28,42 @@ class Player(Person):
         ]
         self.bgcolor = cl.Back.RED
         self.fgcolor = cl.Fore.WHITE
-        self.zindex = 100
+        self.z_index = 100
 
     def __str__(self):
         return "\n".join(self.sprite)
 
     def render_object(self, frame: Frame):
+        """
+        Implement the way to render on the screen cache
+        :param frame: the frame to print on
+        :return:
+        """
         frame.draw_sprite(self.position, self.sprite, ' ',
-                          self.bgcolor, self.fgcolor)
+                          (self.bgcolor, self.fgcolor))
 
     def respond_to_keypress(self, key):
+        """
+        Implement how to respond to a random keypress
+        :param key: the key that was pressed
+        :return:
+        """
         if key == 'a':
             self.position = (self.position[0], max(self.position[1] - 1, 2))
         elif key == 'd':
             self.position = (self.position[0], min(self.position[1] + 1, 60))
-        if key == 'a':
-            self.position = (max(self.position[0] + 3, 1), self.position[1])
+        if key == 'w':
+            self.position = (max(self.position[0] - 3, 1), self.position[1])
 
     def update_on_timestep(self):
-        return
+        """
+        Implement the update functions on every timestep
+        :return:
+        """
         y_coord = min(self.position[0] + 1, 20)
         self.position = (y_coord, self.position[1])
 
 
 if __name__ == '__main__':
-    p = Player()
-    print(p)
+    PLAYER = Player()
+    print(PLAYER)

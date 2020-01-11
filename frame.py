@@ -1,139 +1,157 @@
-import colorama
-import numpy as np
-import os
-import osmanager
-import colorama as cl
+"""
+Keeps the central frame rendering class.
+"""
+
 import time
-from gameobject import GameObject
+import numpy as np
+import colorama as cl
+import osmanager
 
 
 class Frame:
+    """
+    Stores the Frame class with the following major attributes:
+    rows: number of rows in the rendered frame
+    cols: number of columns in the rendered frame
+    text: image matrix - text part
+    bgcolor: image matrix - background color part
+    fgcolor: image matrix - foreground color part
+    previous_render_time: last refresh time
+    """
 
     def __init__(self):
         """
         Initialize the rendering frame
         """
         osmanager.hide_cursor()
-        self.ROWS = 24
-        self.COLS = 80
+        self.rows = 24
+        self.cols = 80
         self.text = np.array(
-            [np.array([' ' for _ in range(self.COLS)]) for _ in range(self.ROWS)])
+            [np.array([' ' for _ in range(self.cols)]) for _ in range(self.rows)])
         self.bgcolor = np.array(
-            [np.array([cl.Back.CYAN for _ in range(self.COLS)]) for _ in range(self.ROWS)])
+            [np.array([cl.Back.CYAN for _ in range(self.cols)]) for _ in range(self.rows)])
         self.fgcolor = np.array(
-            [np.array([cl.Fore.WHITE for _ in range(self.COLS)]) for _ in range(self.ROWS)])
+            [np.array([cl.Fore.WHITE for _ in range(self.cols)]) for _ in range(self.rows)])
         self.previous_render_time = time.time()
 
     def render(self):
         """
         Renders the cached array onto the terminal
         """
-        for row in range(self.ROWS):
-            for col in range(self.COLS):
+        for row in range(self.rows):
+            for col in range(self.cols):
                 print(self.bgcolor[row][col] + self.fgcolor[row]
                       [col] + self.text[row][col], end='')
             print(cl.Style.RESET_ALL)
         self.previous_render_time = time.time()
 
-    def draw_rect(self, top, bot, left, right,
-                  char='.', bgcolor=cl.Back.CYAN, fgcolor=cl.Fore.WHITE):
+    def draw_rect(self, row_limits: tuple, col_limits: tuple,
+                  char='.', color: tuple = (cl.Back.CYAN, cl.Fore.WHITE)):
         """
         Draws a rectangle on the game frame
-
-        Parameters
-        ==========
-        top: row index of the center [inclusive]
-        bot: column index of the center [exclusive]
-        left: radius along the row index (one of the semi-axis of ellipse) [inclusive]
-        right: radius along the col index (one of the semi-axis of ellipse) [exclusive]
-        char: the character used to print the figure
-        bgcolor: colorama.Fore, Color of the Background for the sprite
-        fgcolor: colorama.Back, Color of the Foreground for the sprite
+        :param row_limits: starting and ending row (top-inclusive, bottom-exclusive)
+        :param col_limits: starting and ending col (left-inclusive, right-exclusive)
+        :param char: the character used to print the figure
+        :param color: pair of foreground and background color
         """
-        for i in range(top, bot):
-            for j in range(left, right):
+        for i in range(row_limits[0], row_limits[1]):
+            for j in range(col_limits[0], col_limits[1]):
                 if not self.in_frame_bounds(i, j):
                     continue
                 self.text[i][j] = char
-                self.bgcolor[i][j] = bgcolor
-                self.fgcolor[i][j] = fgcolor
+                self.bgcolor[i][j] = color[0]
+                self.fgcolor[i][j] = color[1]
 
-    def draw_ellipse(self, center_row, center_col, row_radius, col_radius,
-                     char='.', bgcolor=cl.Back.BLACK, fgcolor=cl.Fore.WHITE):
+    def draw_ellipse(self, center: tuple, radius: tuple,
+                     char='.', color: tuple = (cl.Back.BLACK, cl.Fore.WHITE)):
         """
         Draws an ellipse on the game frame
-
-        Parameters
-        ==========
-        center_row: row index of the center
-        center_col: column index of the center
-        row_radius: radius along the row index (one of the semi-axis of ellipse)
-        col_radius: radius along the col index (one of the semi-axis of ellipse)
-        char: the character used to print the figure
-        bgcolor: colorama.Fore, Color of the Background for the sprite
-        fgcolor: colorama.Back, Color of the Foreground for the sprite
+        :param center: (x, y) of the center of ellipse
+        :param radius: semi-major and semi-minor axis (row, col)
+        :param char: the character used to print the figure
+        :param color: colorama.Fore, Color of the Background for the sprite
         """
-        for i in range(center_row - row_radius, center_row + row_radius):
-            for j in range(center_col - col_radius, center_col + col_radius):
+        for i in range(center[0] - radius[0], center[0] + radius[0]):
+            for j in range(center[1] - radius[1], center[1] + radius[1]):
                 if not self.in_frame_bounds(i, j):
                     continue
-                if ((center_row - i) / row_radius) ** 2 + ((center_col - j) / col_radius) ** 2 <= 1:
+                if ((center[0] - i) / radius[0]) ** 2 + ((center[1] - j) / radius[1]) ** 2 <= 1:
                     self.text[i][j] = char
-                    self.bgcolor[i][j] = bgcolor
-                    self.fgcolor[i][j] = fgcolor
+                    self.bgcolor[i][j] = color[0]
+                    self.fgcolor[i][j] = color[1]
 
     def draw_sprite(self, position: tuple, image: list, skip_char: str = ' ',
-                    bgcolor=cl.Back.BLACK, fgcolor=cl.Fore.WHITE):
+                    color: tuple = (cl.Back.BLACK, cl.Fore.WHITE)):
         """
         Draws the sprite on the game frame which is passed in as an array of strings
-
-        Parameters
-        ==========
-        position: pair of (row position, col position) for the top-left corner
-        image: array of strings that represent the image to be drawn
-        skip_char: char, the character that is not a part of the sprite, so don't color it
-        bgcolor: colorama.Fore, Color of the Background for the sprite
-        fgcolor: colorama.Back, Color of the Foreground for the sprite
+        :param position: pair of (row position, col position) for the top-left corner
+        :param image: array of strings that represent the image to be drawn
+        :param skip_char: char, the character that is not a part of the sprite, so don't color it
+        :param color: pair of Background color and Foreground color
         """
-        assert len(image) == 0 or type(image[0]) is str
+        assert not image or isinstance(image[0], str)
         assert len(position) == 2 and len(skip_char) == 1
-        for i in range(len(image)):
-            for j in range(len(image[i])):
-                if not self.in_frame_bounds(i, j) or not self.in_frame_bounds(i + position[0], j + position[1]):
+        for i, _ in enumerate(image):
+            for j, cell in enumerate(image[i]):
+                if not self.in_frame_bounds(i, j) or \
+                        not self.in_frame_bounds(i + position[0], j + position[1]):
                     continue
-                self.text[i + position[0]][j + position[1]] = image[i][j]
+                self.text[i + position[0]][j + position[1]] = cell
                 if image[i][j] != skip_char:
-                    self.bgcolor[i + position[0]][j + position[1]] = bgcolor
-                    self.fgcolor[i + position[0]][j + position[1]] = fgcolor
+                    self.bgcolor[i + position[0]][j + position[1]] = color[0]
+                    self.fgcolor[i + position[0]][j + position[1]] = color[1]
 
-    def broadcast_input(self, objects):
-        ch = osmanager.getch()
-        if ch == -1:
+    @staticmethod
+    def broadcast_input(objects):
+        """
+        Broadcasts the received input to all the objects
+        :param objects: objects to broadcast to
+        :return:
+        """
+        character = osmanager.getch()
+        if character == -1:
             return
-        if ch == 'q':
+        if character == 'q':
             osmanager.sys_exit()
         for item in objects:
-            item.respond_to_keypress(ch)
+            item.respond_to_keypress(character)
 
     def broadcast_render(self, objects):
+        """
+        Broadcasts the rendering step to all the objects
+        :param objects: objects to be rendered
+        :return:
+        """
         for item in objects:
             item.render_object(self)
 
-    def broadcase_timestep(self, objects):
+    @staticmethod
+    def broadcast_timestep(objects):
+        """
+        Broadcasts the timestep event to all the objects
+        :param objects: objects to be updated
+        :return:
+        """
         for item in objects:
             item.update_on_timestep()
 
     def in_frame_bounds(self, i: int, j: int):
-        return i >= 0 and i < self.ROWS and j >= 0 and j < self.COLS
+        """
+        Check if (i, j) is in frame
+        :param i: row index
+        :param j: col index
+        :return: True if it is in, False otherwise
+        """
+        return 0 <= i < self.rows and 0 <= j < self.cols
 
 
 if __name__ == '__main__':
-    x = Frame()
-    x.draw_ellipse(13, 50, 5, 10, bgcolor=cl.Back.MAGENTA)
-    x.draw_rect(3, 5, 10, 20, bgcolor=cl.Back.MAGENTA, fgcolor=cl.Fore.BLACK)
+    X = Frame()
+    X.draw_ellipse((13, 50), (5, 10), color=(cl.Back.MAGENTA, cl.Fore.WHITE))
+    X.draw_rect((3, 5), (10, 20), color=(cl.Back.MAGENTA, cl.Fore.BLACK))
     FRAME_RATE = 10
     while True:
-        if time.time() > x.previous_render_time + 1 / FRAME_RATE:
-            x.broadcast_input([])
+        if time.time() > X.previous_render_time + 1 / FRAME_RATE:
+            X.broadcast_input([])
             osmanager.clrscr()
-            x.render()
+            X.render()

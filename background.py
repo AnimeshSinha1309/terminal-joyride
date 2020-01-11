@@ -1,21 +1,42 @@
-from gameobject import GameObject
-from frame import Frame
+"""
+The background scenery that scrolls but does not interact with anything
+"""
+
 import colorama as cl
+from gameobject import GameObject
 
 
 class Background(GameObject):
+    """
+    Class holding the basic Background, sky, ground, and scenery
+    """
 
     def __init__(self):
-        pass
+        """
+        Initialize the background, here does nothing
+        """
+        # TODO: Get dynamic frame size here, background accordingly
 
     def respond_to_keypress(self, key):
-        pass
+        """
+        Implement how to respond to a random keypress
+        :param key: the key that was pressed
+        :return:
+        """
 
     def update_on_timestep(self):
-        pass
+        """
+        Implement the update functions on every timestep
+        :return:
+        """
 
     def render_object(self, frame):
-        frame.draw_rect(0, frame.ROWS, 0, frame.COLS,
-                        ' ', bgcolor=cl.Back.CYAN)
-        frame.draw_rect(frame.ROWS - 1, frame.ROWS, 0,
-                        frame.COLS, ' ', bgcolor=cl.Back.GREEN)
+        """
+        Implement the way to render on the screen cache
+        :param frame: the frame to print on
+        :return:
+        """
+        frame.draw_rect((0, frame.rows), (0, frame.cols),
+                        ' ', color=(cl.Back.CYAN, cl.Fore.WHITE))
+        frame.draw_rect((frame.rows - 1, frame.rows), (0, frame.cols),
+                        ' ', color=(cl.Back.GREEN, cl.Fore.WHITE))
