@@ -136,6 +136,24 @@ def sys_exit():
     exit(0)
 
 
+class LogWriter:
+
+    @staticmethod
+    def verbose(log):
+        with open('verbose.log', 'w+') as f:
+            f.write(log)
+
+    @staticmethod
+    def message(log):
+        with open('message.log', 'w+') as f:
+            f.write(log)
+
+    @staticmethod
+    def error(log):
+        with open('error.log', 'w+') as f:
+            f.write(log)
+
+
 if __name__ == '__main__':
     for i in range(100000000000):
         print(i)
