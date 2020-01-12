@@ -18,14 +18,15 @@ class Frame:
     fgcolor: image matrix - foreground color part
     previous_render_time: last refresh time
     """
+    score = 0
+    lives = 3
 
     def __init__(self):
         """
         Initialize the rendering frame
         """
         osmanager.hide_cursor()
-        self.rows = 24
-        self.cols = 80
+        self.rows, self.cols = 24, 80
         self.text = np.array(
             [np.array([' ' for _ in range(self.cols)]) for _ in range(self.rows)])
         self.bgcolor = np.array(
@@ -44,6 +45,7 @@ class Frame:
                       [col] + self.text[row][col], end='')
             print(cl.Style.RESET_ALL)
         self.previous_render_time = time.time()
+        print("Score: {0:4} | Lives: {1:2}".format(self.score, self.lives))
 
     def draw_rect(self, row_limits: tuple, col_limits: tuple,
                   char='.', color: tuple = (cl.Back.CYAN, cl.Fore.WHITE)):
@@ -52,7 +54,7 @@ class Frame:
         :param row_limits: starting and ending row (top-inclusive, bottom-exclusive)
         :param col_limits: starting and ending col (left-inclusive, right-exclusive)
         :param char: the character used to print the figure
-        :param color: pair of foreground and background color
+        :param color: pair of (background, foreground) color
         """
         for i in range(row_limits[0], row_limits[1]):
             for j in range(col_limits[0], col_limits[1]):
@@ -143,6 +145,14 @@ class Frame:
         :return: True if it is in, False otherwise
         """
         return 0 <= i < self.rows and 0 <= j < self.cols
+
+    def player_die(self):
+        """
+        Reduces the lives and moves to the exit sequence if lives = 0
+        """
+        self.lives -= 1
+        if self.lives <= 0:
+            osmanager.sys_exit()
 
 
 if __name__ == '__main__':

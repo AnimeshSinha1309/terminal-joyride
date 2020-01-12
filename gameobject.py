@@ -3,6 +3,7 @@ Has the fundamental Abstract class for all objects in the game.
 """
 
 from abc import ABC
+import colorama as cl
 
 
 class GameObject(ABC):
@@ -11,12 +12,19 @@ class GameObject(ABC):
     in the game must bear.
 
     The following methods must be implemented:
-    * __init__()
     * __str__()
     * respond_to_keypress(key)
     * update_on_timestep()
     * render_object(frame)
     """
+
+    sprite = ""
+    position = (0, 0)
+    bgcolor = cl.Back.BLACK
+    fgcolor = cl.Fore.WHITE
+
+    def __str__(self):
+        return "\n".join(self.sprite)
 
     def respond_to_keypress(self, key):
         """
@@ -33,10 +41,30 @@ class GameObject(ABC):
         """
         raise NotImplementedError
 
+    def get_all_coordinates(self):
+        """
+        Returns all coordinates where the firebeam is present (can collide)
+        :return: list of tuples (i, j), coordinates where the firebeam is present
+        """
+        return [(i + self.position[0], j + self.position[1])
+                for i, row in enumerate(self.sprite)
+                for j, cell in enumerate(row)
+                if cell != ' ']
+
+    def detect_collision(self, player):
+        """
+        Check if there is a collision with another object
+        :param other: object with which to check
+        :return: True if colliding, False otherwise
+        """
+        coords = self.get_all_coordinates() + player.get_all_coordinates()
+        return len(set(coords)) < len(coords)
+
     def render_object(self, frame):
         """
         Implement the way to render on the screen cache
         :param frame: the frame to print on
         :return:
         """
-        raise NotImplementedError
+        frame.draw_sprite((int(self.position[0]), int(self.position[1])),
+                          self.sprite, ' ', (self.bgcolor, self.fgcolor))

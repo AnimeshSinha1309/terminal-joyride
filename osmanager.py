@@ -90,7 +90,7 @@ def clrscr():
     =======
     >>> clrscr()
     """
-    _ = os.system('cls') if os.name == 'nt' else os.system('clear')
+    os.system('clear')
 
 
 def sys_exit():

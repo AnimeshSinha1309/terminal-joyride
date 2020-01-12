@@ -18,8 +18,6 @@ class Player(Person):
     """
 
     def __init__(self):
-        self.score = 0
-        self.lives = 3
         self.position = (20, 4)
         self.sprite = [
             " O ",
@@ -29,6 +27,7 @@ class Player(Person):
         self.bgcolor = cl.Back.RED
         self.fgcolor = cl.Fore.WHITE
         self.z_index = 100
+        self.last_died = -10000
 
     def __str__(self):
         return "\n".join(self.sprite)
@@ -67,3 +66,4 @@ class Player(Person):
 if __name__ == '__main__':
     PLAYER = Player()
     print(PLAYER)
+    print(PLAYER.get_all_coordinates())
