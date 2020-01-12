@@ -11,12 +11,6 @@ class Background(GameObject):
     Class holding the basic Background, sky, ground, and scenery
     """
 
-    def __init__(self):
-        """
-        Initialize the background, here does nothing
-        """
-        # TODO: Get dynamic frame size here, background accordingly
-
     def respond_to_keypress(self, key):
         """
         Implement how to respond to a random keypress

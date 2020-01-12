@@ -11,22 +11,24 @@ import osmanager
 class Frame:
     """
     Stores the Frame class with the following major attributes:
-    rows: number of rows in the rendered frame
-    cols: number of columns in the rendered frame
-    text: image matrix - text part
-    bgcolor: image matrix - background color part
-    fgcolor: image matrix - foreground color part
-    previous_render_time: last refresh time
+    :property rows: number of rows in the rendered frame
+    :property cols: number of columns in the rendered frame
+    :property text: image matrix - text part
+    :property bgcolor: image matrix - background color part
+    :property fgcolor: image matrix - foreground color part
+    :property previous_render_time: last refresh time
+    :property score: score of the player
+    :property lives: number of lives the player has
     """
     score = 0
     lives = 3
+    rows, cols = 24, 80
 
     def __init__(self):
         """
         Initialize the rendering frame
         """
         osmanager.hide_cursor()
-        self.rows, self.cols = 24, 80
         self.text = np.array(
             [np.array([' ' for _ in range(self.cols)]) for _ in range(self.rows)])
         self.bgcolor = np.array(
@@ -98,8 +100,8 @@ class Frame:
                 if not self.in_frame_bounds(i, j) or \
                         not self.in_frame_bounds(i + position[0], j + position[1]):
                     continue
-                self.text[i + position[0]][j + position[1]] = cell
                 if image[i][j] != skip_char:
+                    self.text[i + position[0]][j + position[1]] = cell
                     self.bgcolor[i + position[0]][j + position[1]] = color[0]
                     self.fgcolor[i + position[0]][j + position[1]] = color[1]
 

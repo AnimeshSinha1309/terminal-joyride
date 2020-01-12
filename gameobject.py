@@ -22,6 +22,7 @@ class GameObject(ABC):
     position = (0, 0)
     bgcolor = cl.Back.BLACK
     fgcolor = cl.Fore.WHITE
+    delete_me = False
 
     def __str__(self):
         return "\n".join(self.sprite)
@@ -66,5 +67,6 @@ class GameObject(ABC):
         :param frame: the frame to print on
         :return:
         """
-        frame.draw_sprite((int(self.position[0]), int(self.position[1])),
-                          self.sprite, ' ', (self.bgcolor, self.fgcolor))
+        if not self.delete_me:
+            frame.draw_sprite((int(self.position[0]), int(self.position[1])),
+                              self.sprite, ' ', (self.bgcolor, self.fgcolor))

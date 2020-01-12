@@ -60,7 +60,8 @@ class FireBeam(Spawnable):
         :return: False if it's supposed to be deleted, True otherwise
         """
         self.position = (self.position[0], self.position[1] - 0.5)
-        return not self.position[0] < -4
+        if self.position[0] < -4:
+            self.delete_me = True
 
     @staticmethod
     def spawn(frame_size: tuple, prob: float = 1/50):
