@@ -22,7 +22,7 @@ BOSS = None
 
 # The parts of the game
 OBJECTS = [BACKGROUND, PLAYER]
-ENDGAME_TIME = 10
+ENDGAME_TIME = 200
 
 while True:
     # Get the input to all the objects

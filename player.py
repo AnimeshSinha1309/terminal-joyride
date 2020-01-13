@@ -63,6 +63,9 @@ class Player(Person):
         elif key == 'f':
             self.bullets.append(MyBullet(self.position))
 
+    def shoot_bullet(self):
+        self.bullets.append(MyBullet(self.position))
+
     def update_on_timestep(self):
         """
         Implement the update functions on every timestep
@@ -74,6 +77,7 @@ class Player(Person):
         self.position = (y_coord, self.position[1])
         for bullet in self.bullets:
             bullet.update_on_timestep()
+
 
 if __name__ == '__main__':
     PLAYER = Player()

@@ -22,4 +22,7 @@ class Person(GameObject):
         raise NotImplementedError
 
     def shoot_bullet(self):
+        """
+        Functional interface to shoot bullets out
+        """
         raise NotImplementedError

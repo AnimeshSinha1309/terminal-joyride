@@ -52,13 +52,13 @@ class GameObject(ABC):
                 for j, cell in enumerate(row)
                 if cell != ' ']
 
-    def detect_collision(self, player):
+    def detect_collision(self, other):
         """
         Check if there is a collision with another object
         :param other: object with which to check
         :return: True if colliding, False otherwise
         """
-        coords = self.get_all_coordinates() + player.get_all_coordinates()
+        coords = self.get_all_coordinates() + other.get_all_coordinates()
         return len(set(coords)) < len(coords)
 
     def render_object(self, frame):

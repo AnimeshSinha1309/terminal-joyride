@@ -8,6 +8,9 @@ import container
 
 
 class MyBullet(GameObject):
+    """
+    The bullets class, parameters hardcoded for the myre bullets
+    """
 
     def __init__(self, position):
         self.sprite = ["=>"]
@@ -19,9 +22,6 @@ class MyBullet(GameObject):
         self.position = (self.position[0], self.position[1] + 2)
         if self.position[1] > container.FRAME_COLS:
             self.delete_me = True
-
-    def render_object(self, frame):
-        return super().render_object(frame)
 
     def respond_to_keypress(self, key):
         return
@@ -35,6 +35,9 @@ class MyBullet(GameObject):
 
 
 class EnemyBullet(GameObject):
+    """
+    The bullets class, parameters hardcoded for the boss bullets
+    """
 
     def __init__(self, position):
         self.sprite = [
@@ -49,9 +52,6 @@ class EnemyBullet(GameObject):
         self.position = (self.position[0], self.position[1] - 4)
         if self.position[1] < 0:
             self.delete_me = True
-
-    def render_object(self, frame):
-        return super().render_object(frame)
 
     def respond_to_keypress(self, key):
         return

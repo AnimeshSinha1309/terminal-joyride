@@ -157,6 +157,7 @@ class Frame:
         """
         self.lives -= 1
         if self.lives <= 0:
+            print("You Lose")
             osmanager.sys_exit()
 
 

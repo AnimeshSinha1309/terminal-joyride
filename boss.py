@@ -16,12 +16,13 @@ class Boss(Person):
     Final Boss of the game, he follows you around and shoots at you
     """
 
+    bgcolor = cl.Back.BLACK
+    fgcolor = cl.Fore.RED
+
     def __init__(self, player: Player):
         """
         Initialize the boss with the sprite, colors and player to follow
         """
-        self.bgcolor = cl.Back.BLACK
-        self.fgcolor = cl.Fore.RED
         self.sprite = [
             "&&&&.----.__ &",
             "&&&/---.__  \\&",
@@ -76,7 +77,15 @@ class Boss(Person):
                                      container.FRAME_ROWS - len(self.sprite)),
                                  self.position[1])
 
+    def shoot_bullet(self):
+        self.bullets.append(EnemyBullet(self.position))
+
     def die(self):
+        """
+        Loses the life for the Boss, ends the game if boss is dead.
+        """
         self.lives -= 1
         if self.lives <= 0:
             self.delete_me = True
+            print("You Win")
+            osmanager.sys_exit()
