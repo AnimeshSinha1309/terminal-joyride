@@ -59,6 +59,8 @@ class FireBeam(Spawnable):
         Move the obstacle to the right in every frame
         :return: False if it's supposed to be deleted, True otherwise
         """
+        if self.delete_me:
+            return
         self.position = (self.position[0], self.position[1] - 0.5)
         if self.position[0] < -4:
             self.delete_me = True

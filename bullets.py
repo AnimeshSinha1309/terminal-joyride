@@ -26,6 +26,13 @@ class MyBullet(GameObject):
     def respond_to_keypress(self, key):
         return
 
+    def detect_collision(self, other):
+        for point in other.get_all_coordinates():
+            if 0 <= int(self.position[0]) - int(point[0]) < 2 and \
+                    0 <= int(self.position[1]) - int(point[1]) < 1:
+                return True
+        return False
+
 
 class EnemyBullet(GameObject):
 
@@ -48,3 +55,10 @@ class EnemyBullet(GameObject):
 
     def respond_to_keypress(self, key):
         return
+
+    def detect_collision(self, other):
+        for point in other.get_all_coordinates():
+            if 0 <= int(point[0]) - int(self.position[0]) < 3 and \
+                    0 <= int(point[1]) - int(self.position[1]) < 2:
+                return True
+        return False

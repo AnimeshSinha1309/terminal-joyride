@@ -18,6 +18,7 @@ FRAME = Frame()
 PLAYER = Player()
 BACKGROUND = Background()
 TIMESTEP = 0
+BOSS = None
 
 # The parts of the game
 OBJECTS = [BACKGROUND, PLAYER]
@@ -46,5 +47,21 @@ while True:
                     PLAYER.last_died = TIMESTEP
         # Initialize the Boss Enemy
         if TIMESTEP == ENDGAME_TIME + 5:
-            BOSS = Boss((FRAME.rows, FRAME.cols), PLAYER)
+            BOSS = Boss(PLAYER)
             OBJECTS.append(BOSS)
+        # Check the bullet shootings
+        for bullet in PLAYER.bullets:
+            if bullet.delete_me:
+                continue
+            for item in OBJECTS:
+                if isinstance(item, FireBeam) and bullet.detect_collision(item):
+                    item.delete_me = True
+            if BOSS is not None and bullet.detect_collision(BOSS):
+                BOSS.die()
+        if BOSS is not None:
+            for bullet in BOSS.bullets:
+                if bullet.delete_me:
+                    continue
+                if TIMESTEP > PLAYER.last_died + 4 and bullet.detect_collision(PLAYER):
+                    PLAYER.last_died = TIMESTEP
+                    FRAME.player_die()

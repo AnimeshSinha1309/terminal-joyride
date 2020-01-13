@@ -118,7 +118,8 @@ class Frame:
         if character == 'q':
             osmanager.sys_exit()
         for item in objects:
-            item.respond_to_keypress(character)
+            if not item.delete_me:
+                item.respond_to_keypress(character)
 
     def broadcast_render(self, objects):
         """
@@ -127,7 +128,8 @@ class Frame:
         :return:
         """
         for item in objects:
-            item.render_object(self)
+            if not item.delete_me:
+                item.render_object(self)
 
     @staticmethod
     def broadcast_timestep(objects):
@@ -137,7 +139,8 @@ class Frame:
         :return:
         """
         for item in objects:
-            item.update_on_timestep()
+            if not item.delete_me:
+                item.update_on_timestep()
 
     def in_frame_bounds(self, i: int, j: int):
         """

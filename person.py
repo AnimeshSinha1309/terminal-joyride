@@ -20,3 +20,6 @@ class Person(GameObject):
 
     def respond_to_keypress(self, key):
         raise NotImplementedError
+
+    def shoot_bullet(self):
+        raise NotImplementedError
