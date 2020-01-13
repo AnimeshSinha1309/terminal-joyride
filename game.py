@@ -9,6 +9,7 @@ from player import Player
 from background import Background
 from firebeam import FireBeam
 from boss import Boss
+from magnet import Magnet
 
 FRAME_RATE = 16
 
@@ -23,6 +24,7 @@ BOSS = None
 # The parts of the game
 OBJECTS = [BACKGROUND, PLAYER]
 ENDGAME_TIME = 200
+MAGNET_TIME = 50
 
 while True:
     # Get the input to all the objects
@@ -65,3 +67,7 @@ while True:
                 if TIMESTEP > PLAYER.last_died + 4 and bullet.detect_collision(PLAYER):
                     PLAYER.last_died = TIMESTEP
                     FRAME.player_die()
+        # Create the Magnet
+        if TIMESTEP == MAGNET_TIME:
+            MAGNET = Magnet(PLAYER)
+            OBJECTS.append(MAGNET)

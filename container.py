@@ -5,3 +5,5 @@ Contains Global constants that need to be synced across all modules
 
 FRAME_ROWS, FRAME_COLS = 24, 80
 FRAME_SIZE = (FRAME_ROWS, FRAME_COLS)
+
+MAGNET_LIFE = 200

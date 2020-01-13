@@ -41,8 +41,8 @@ class Player(Person):
         """
         if self.delete_me:
             return
-        frame.draw_sprite(self.position, self.sprite, ' ',
-                          (self.bgcolor, self.fgcolor))
+        frame.draw_sprite((int(self.position[0]), int(self.position[1])),
+                          self.sprite, ' ', (self.bgcolor, self.fgcolor))
         for bullet in self.bullets:
             bullet.render_object(frame)
 
