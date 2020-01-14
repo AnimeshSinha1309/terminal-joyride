@@ -46,7 +46,7 @@ while True:
         for coin in COINS:
             if not coin.delete_me and coin.detect_collision(PLAYER):
                 coin.delete_me = True
-                container.score += 1
+                container.SCORE += 1
         COINS = COINS + Coin.spawn(0.05)
         # Render the Frame
         FRAME.render()
@@ -70,7 +70,7 @@ while True:
                 continue
             for item in OBJECTS:
                 if isinstance(item, FireBeam) and bullet.detect_collision(item):
-                    container.score += 3
+                    container.SCORE += 3
                     item.delete_me = True
             if BOSS is not None and bullet.detect_collision(BOSS):
                 BOSS.die()

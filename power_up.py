@@ -9,10 +9,13 @@ import container
 
 
 class PowerUp(GameObject):
+    """
+    General Updates and Attributes of each power-up
+    """
 
     visible = False
     activated = False
-    spawn_prob = 0.1
+    spawn_prob = 0.02
     activated_time = 0
 
     def update_on_timestep(self):
@@ -42,6 +45,11 @@ class PowerUp(GameObject):
         pass
 
     def activate(self, activate):
+        """
+        Call this to activate or deactivate the power-up affecting the other
+        actors in the game
+        :param activate: boolean, True if activate, False if deactivate
+        """
         self.visible = False
         raise NotImplementedError
 
@@ -52,9 +60,13 @@ class PowerUp(GameObject):
 
 
 class SpeedUp(PowerUp):
+    """
+    Implements the SpeedUp PowerUp
+    """
+
+    sprite = ["*"]
 
     def __init__(self):
-        self.sprite = ["*"]
         self.bgcolor = cl.Back.BLUE
         self.fgcolor = cl.Fore.WHITE
 
@@ -70,9 +82,13 @@ class SpeedUp(PowerUp):
 
 
 class Shield(PowerUp):
+    """
+    Implements the Shield PowerUp
+    """
+
+    sprite = ["+"]
 
     def __init__(self, player):
-        self.sprite = ["+"]
         self.bgcolor = cl.Back.BLUE
         self.fgcolor = cl.Fore.WHITE
         self.player = player

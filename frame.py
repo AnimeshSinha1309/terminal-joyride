@@ -46,7 +46,7 @@ class Frame:
             print(cl.Style.RESET_ALL)
         self.previous_render_time = time.time()
         print("Score: {0:4} | Lives: {1:2}".format(
-            container.score, self.lives))
+            container.SCORE, self.lives))
 
     def draw_rect(self, row_limits: tuple, col_limits: tuple,
                   char='.', color: tuple = (cl.Back.CYAN, cl.Fore.WHITE)):

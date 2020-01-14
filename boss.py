@@ -8,7 +8,6 @@ import container
 from person import Person
 from player import Player
 from bullets import EnemyBullet
-import osmanager
 
 
 class Boss(Person):
@@ -62,7 +61,8 @@ class Boss(Person):
         Move the boss into the frame and then make him track the player
         """
         if self.position[1] > container.FRAME_COLS - len(self.sprite[0]) - 2:
-            self.position = (self.position[0], self.position[1] - container.SCROLL_SPEED)
+            self.position = (
+                self.position[0], self.position[1] - container.SCROLL_SPEED)
         else:
             shoot = np.random.choice([False, True], p=[0.9, 0.1])
             for bullet in self.bullets:
@@ -86,6 +86,6 @@ class Boss(Person):
         """
         self.lives -= 1
         if self.lives <= 0:
-            container.score += 100
+            container.SCORE += 100
             self.delete_me = True
             container.exit_sequence(True)

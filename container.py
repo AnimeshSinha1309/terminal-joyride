@@ -17,15 +17,19 @@ SHIELD_LIFE = 20
 SPEEDUP_LIFE = 20
 
 SHEILD_UP = False
-
-score = 0
+SCORE = 0
 
 
 def exit_sequence(won: bool):
+    """
+    Exits from the game gracefully
+    """
     osmanager.clrscr()
     if won:
         print("You Win")
     else:
         print("You Lose")
+    print("Score =", SCORE)
     input()
+    osmanager.clrscr()
     osmanager.sys_exit()
