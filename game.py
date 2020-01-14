@@ -24,13 +24,11 @@ BACKGROUND = Background()
 TIMESTEP = 0
 BOSS = None
 COINS = []
-SHIELD = Shield()
+SHIELD = Shield(PLAYER)
 SPEEDUP = SpeedUp()
 
 # The parts of the game
 OBJECTS = [BACKGROUND, PLAYER, SHIELD, SPEEDUP]
-ENDGAME_TIME = 200
-MAGNET_TIME = 50
 
 while True:
     # Get the input to all the objects
@@ -45,7 +43,6 @@ while True:
         # Spawn and Process coins
         FRAME.broadcast_timestep(COINS)
         FRAME.broadcast_render(COINS)
-        # COINS = COINS + Coin.spawn()
         for coin in COINS:
             if not coin.delete_me and coin.detect_collision(PLAYER):
                 coin.delete_me = True
@@ -54,17 +51,17 @@ while True:
         # Render the Frame
         FRAME.render()
         # Initialize the new FireBeams and Collision Detect
-        if TIMESTEP < ENDGAME_TIME:
+        if TIMESTEP < container.ENDGAME_TIME:
             NEW_FIREBEAM = FireBeam.spawn()
             if NEW_FIREBEAM is not False:
                 OBJECTS.append(NEW_FIREBEAM)
-        if TIMESTEP > PLAYER.last_died + 4:
+        if TIMESTEP > PLAYER.last_died + 4 and not container.SHEILD_UP:
             for obj in OBJECTS:
                 if isinstance(obj, FireBeam) and obj.detect_collision(PLAYER):
                     FRAME.player_die()
                     PLAYER.last_died = TIMESTEP
         # Initialize the Boss Enemy
-        if TIMESTEP == ENDGAME_TIME + 5:
+        if TIMESTEP == container.ENDGAME_TIME + 5:
             BOSS = Boss(PLAYER)
             OBJECTS.append(BOSS)
         # Check the bullet shootings
@@ -85,7 +82,11 @@ while True:
                     PLAYER.last_died = TIMESTEP
                     FRAME.player_die()
         # Create the Magnet
-        if TIMESTEP == MAGNET_TIME:
+        if TIMESTEP == container.MAGNET_TIME:
             MAGNET = Magnet(PLAYER)
             OBJECTS.append(MAGNET)
-        # Spawn Powerups
+        # Handle Power-ups
+        if SHIELD.detect_collision(PLAYER):
+            SHIELD.activate(True)
+        if SPEEDUP.detect_collision(PLAYER):
+            SPEEDUP.activate(True)

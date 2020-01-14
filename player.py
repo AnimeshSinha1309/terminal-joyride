@@ -7,6 +7,7 @@ import colorama as cl
 from person import Person
 from frame import Frame
 from bullets import MyBullet
+import container
 
 
 class Player(Person):
@@ -73,7 +74,7 @@ class Player(Person):
         """
         if self.delete_me:
             return
-        y_coord = min(self.position[0] + 1, 20)
+        y_coord = min(self.position[0] + container.SCROLL_SPEED * 2, 20)
         self.position = (y_coord, self.position[1])
         for bullet in self.bullets:
             bullet.update_on_timestep()

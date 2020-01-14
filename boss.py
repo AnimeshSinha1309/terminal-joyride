@@ -62,7 +62,7 @@ class Boss(Person):
         Move the boss into the frame and then make him track the player
         """
         if self.position[1] > container.FRAME_COLS - len(self.sprite[0]) - 2:
-            self.position = (self.position[0], self.position[1] - 0.2)
+            self.position = (self.position[0], self.position[1] - container.SCROLL_SPEED)
         else:
             shoot = np.random.choice([False, True], p=[0.9, 0.1])
             for bullet in self.bullets:
@@ -71,9 +71,9 @@ class Boss(Person):
                 self.bullets.append(EnemyBullet(self.position))
             if self.player.position[0] < self.position[0]:
                 self.position = (
-                    max(self.position[0] - 0.1, 0), self.position[1])
+                    max(self.position[0] - container.SCROLL_SPEED / 5, 0), self.position[1])
             if self.player.position[0] > self.position[0]:
-                self.position = (min(self.position[0] + 0.1,
+                self.position = (min(self.position[0] + container.SCROLL_SPEED / 5,
                                      container.FRAME_ROWS - len(self.sprite)),
                                  self.position[1])
 
