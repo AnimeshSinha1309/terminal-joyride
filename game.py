@@ -12,6 +12,7 @@ from boss import Boss
 from magnet import Magnet
 from coins import Coin
 import container
+from power_up import SpeedUp, Shield
 
 FRAME_RATE = 16
 
@@ -23,9 +24,11 @@ BACKGROUND = Background()
 TIMESTEP = 0
 BOSS = None
 COINS = []
+SHIELD = Shield()
+SPEEDUP = SpeedUp()
 
 # The parts of the game
-OBJECTS = [BACKGROUND, PLAYER]
+OBJECTS = [BACKGROUND, PLAYER, SHIELD, SPEEDUP]
 ENDGAME_TIME = 200
 MAGNET_TIME = 50
 
@@ -85,3 +88,4 @@ while True:
         if TIMESTEP == MAGNET_TIME:
             MAGNET = Magnet(PLAYER)
             OBJECTS.append(MAGNET)
+        # Spawn Powerups

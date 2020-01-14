@@ -19,7 +19,7 @@ class MyBullet(GameObject):
         self.position = (position[0] + 1, position[1] + 3)
 
     def update_on_timestep(self):
-        self.position = (self.position[0], self.position[1] + 2)
+        self.position = (self.position[0], self.position[1] + container.SCROLL_SPEED * 4)
         if self.position[1] > container.FRAME_COLS:
             self.delete_me = True
 
@@ -49,7 +49,7 @@ class EnemyBullet(GameObject):
         self.position = (position[0] + 5, position[1] - 3)
 
     def update_on_timestep(self):
-        self.position = (self.position[0], self.position[1] - 4)
+        self.position = (self.position[0], self.position[1] - container.SCROLL_SPEED * 8)
         if self.position[1] < 0:
             self.delete_me = True
 
