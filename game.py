@@ -10,6 +10,8 @@ from background import Background
 from firebeam import FireBeam
 from boss import Boss
 from magnet import Magnet
+from coins import Coin
+import container
 
 FRAME_RATE = 16
 
@@ -20,6 +22,7 @@ PLAYER = Player()
 BACKGROUND = Background()
 TIMESTEP = 0
 BOSS = None
+COINS = [Coin((3, 80))]
 
 # The parts of the game
 OBJECTS = [BACKGROUND, PLAYER]
@@ -36,10 +39,19 @@ while True:
         FRAME.broadcast_timestep(OBJECTS)
         FRAME.broadcast_render(OBJECTS)
         osmanager.clrscr()
+        # Spawn and Process coins
+        FRAME.broadcast_timestep(COINS)
+        FRAME.broadcast_render(COINS)
+        FRAME.render()
+        for coin in COINS:
+            if not coin.delete_me and coin.detect_collision(PLAYER):
+                coin.delete_me = True
+                container.score += 1
+        # Render the Frame
         FRAME.render()
         # Initialize the new FireBeams and Collision Detect
         if TIMESTEP < ENDGAME_TIME:
-            NEW_FIREBEAM = FireBeam.spawn((FRAME.rows, FRAME.cols))
+            NEW_FIREBEAM = FireBeam.spawn()
             if NEW_FIREBEAM is not False:
                 OBJECTS.append(NEW_FIREBEAM)
         if TIMESTEP > PLAYER.last_died + 4:

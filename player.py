@@ -12,10 +12,10 @@ from bullets import MyBullet
 class Player(Person):
     """
     Stores the Player class with the following major properties:
-    Lives: int, lives left with the player
-    Score: int, score of the player
-    Position: (row, col) index of the top left corner of sprite
-    Velocity: int, velocity
+    :property Lives: int, lives left with the player
+    :property Score: int, score of the player
+    :property Position: (row, col) index of the top left corner of sprite
+    :property Velocity: int, velocity
     """
 
     def __init__(self):

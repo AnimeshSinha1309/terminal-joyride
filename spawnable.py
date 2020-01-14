@@ -19,15 +19,14 @@ class Spawnable(GameObject):
 
     def respond_to_keypress(self, key):
         """
-        Repond the the keypress broadcasted by the frame
+        Respond the the keypress broadcast by the frame
         :param key: the key that was pressed
         """
 
     @staticmethod
-    def spawn(frame_size: tuple, prob: float):
+    def spawn(prob: float):
         """
         Randomly decides whether or not to spawn an object here
-        :param frame_size: (rows, cols) in the frame
         :param prob: the probability for spawning
         """
         raise NotImplementedError

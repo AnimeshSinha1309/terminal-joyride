@@ -6,6 +6,7 @@ import time
 import numpy as np
 import colorama as cl
 import osmanager
+import container
 
 
 class Frame:
@@ -17,10 +18,7 @@ class Frame:
     :property bgcolor: image matrix - background color part
     :property fgcolor: image matrix - foreground color part
     :property previous_render_time: last refresh time
-    :property score: score of the player
-    :property lives: number of lives the player has
     """
-    score = 0
     lives = 3
     rows, cols = 24, 80
 
@@ -47,7 +45,8 @@ class Frame:
                       [col] + self.text[row][col], end='')
             print(cl.Style.RESET_ALL)
         self.previous_render_time = time.time()
-        print("Score: {0:4} | Lives: {1:2}".format(self.score, self.lives))
+        print("Score: {0:4} | Lives: {1:2}".format(
+            container.score, self.lives))
 
     def draw_rect(self, row_limits: tuple, col_limits: tuple,
                   char='.', color: tuple = (cl.Back.CYAN, cl.Fore.WHITE)):
