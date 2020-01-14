@@ -86,6 +86,6 @@ class Boss(Person):
         """
         self.lives -= 1
         if self.lives <= 0:
+            container.score += 100
             self.delete_me = True
-            print("You Win")
-            osmanager.sys_exit()
+            container.exit_sequence(True)

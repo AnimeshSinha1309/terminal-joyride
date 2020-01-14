@@ -156,8 +156,7 @@ class Frame:
         """
         self.lives -= 1
         if self.lives <= 0:
-            print("You Lose")
-            osmanager.sys_exit()
+            container.exit_sequence(False)
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ PLAYER = Player()
 BACKGROUND = Background()
 TIMESTEP = 0
 BOSS = None
-COINS = [Coin((3, 80))]
+COINS = []
 
 # The parts of the game
 OBJECTS = [BACKGROUND, PLAYER]
@@ -42,11 +42,12 @@ while True:
         # Spawn and Process coins
         FRAME.broadcast_timestep(COINS)
         FRAME.broadcast_render(COINS)
-        FRAME.render()
+        # COINS = COINS + Coin.spawn()
         for coin in COINS:
             if not coin.delete_me and coin.detect_collision(PLAYER):
                 coin.delete_me = True
                 container.score += 1
+        COINS = COINS + Coin.spawn(0.05)
         # Render the Frame
         FRAME.render()
         # Initialize the new FireBeams and Collision Detect
@@ -69,6 +70,7 @@ while True:
                 continue
             for item in OBJECTS:
                 if isinstance(item, FireBeam) and bullet.detect_collision(item):
+                    container.score += 3
                     item.delete_me = True
             if BOSS is not None and bullet.detect_collision(BOSS):
                 BOSS.die()

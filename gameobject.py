@@ -47,7 +47,7 @@ class GameObject(ABC):
         Returns all coordinates where the firebeam is present (can collide)
         :return: list of tuples (i, j), coordinates where the firebeam is present
         """
-        return [(i + self.position[0], j + self.position[1])
+        return [(int(i + self.position[0]), int(j + self.position[1]))
                 for i, row in enumerate(self.sprite)
                 for j, cell in enumerate(row)
                 if cell != ' ']
