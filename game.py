@@ -28,16 +28,17 @@ SHIELD = Shield(PLAYER)
 SPEEDUP = SpeedUp()
 
 # The parts of the game
-OBJECTS = [BACKGROUND, PLAYER, SHIELD, SPEEDUP]
+OBJECTS = [BACKGROUND, PLAYER]
 
 while True:
     # Get the input to all the objects
     if time.time() > FRAME.previous_render_time + 1 / (2 * FRAME_RATE):
-        FRAME.broadcast_input(OBJECTS)
+        FRAME.broadcast_input([PLAYER, SHIELD, SPEEDUP])
     if time.time() > FRAME.previous_render_time + 1 / FRAME_RATE:
         # Update and Render
         TIMESTEP += 1
         FRAME.broadcast_timestep(OBJECTS)
+        FRAME.broadcast_timestep([SPEEDUP, SHIELD])
         FRAME.broadcast_render(OBJECTS)
         osmanager.clrscr()
         # Spawn and Process coins
@@ -85,8 +86,3 @@ while True:
         if TIMESTEP == container.MAGNET_TIME:
             MAGNET = Magnet(PLAYER)
             OBJECTS.append(MAGNET)
-        # Handle Power-ups
-        if SHIELD.detect_collision(PLAYER):
-            SHIELD.activate(True)
-        if SPEEDUP.detect_collision(PLAYER):
-            SPEEDUP.activate(True)

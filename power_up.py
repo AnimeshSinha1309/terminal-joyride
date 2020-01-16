@@ -3,7 +3,6 @@ Implement the Speed-up power-up
 """
 
 import colorama as cl
-import numpy as np
 from gameobject import GameObject
 import container
 
@@ -11,38 +10,33 @@ import container
 class PowerUp(GameObject):
     """
     General Updates and Attributes of each power-up
+    Does not get rendered, just accepts keygrabs
     """
 
-    visible = False
     activated = False
-    spawn_prob = 0.02
-    activated_time = 0
+    refill_time = 0
+    usable_time = 0
 
     def update_on_timestep(self):
-        if not self.visible and not self.activated:
-            create = np.random.choice(
-                [True, False], p=[self.spawn_prob, 1 - self.spawn_prob])
-            if create:
-                self.position = (np.random.randint(container.FRAME_ROWS - 1),
-                                 container.FRAME_COLS)
-                self.visible = True
-        elif self.visible:
-            self.position = (self.position[0],
-                             self.position[1] - container.SCROLL_SPEED)
-            if self.position[1] < 0:
-                self.visible = False
-        elif self.activated:
-            self.activated_time -= 1
-            if self.activated_time < 0:
+        if self.activated:
+            if self.usable_time > 0:
+                self.usable_time -= 1
+            else:
                 self.activated = False
                 self.activate(False)
+                self.refill_time = container.SHIELD_REFILL
+        elif not self.activated:
+            if self.refill_time > 0:
+                self.refill_time -= 1
 
     def render_object(self, frame):
-        if self.visible:
-            super(PowerUp, self).render_object(frame)
+        pass
 
     def respond_to_keypress(self, key):
-        pass
+        """
+        Press the button to activate the shield
+        """
+        raise NotImplementedError
 
     def activate(self, activate):
         """
@@ -50,13 +44,10 @@ class PowerUp(GameObject):
         actors in the game
         :param activate: boolean, True if activate, False if deactivate
         """
-        self.visible = False
         raise NotImplementedError
 
     def detect_collision(self, other):
-        val = (int(self.position[0]), int(
-            self.position[1])) in other.get_all_coordinates()
-        return val
+        return False
 
 
 class SpeedUp(PowerUp):
@@ -64,21 +55,21 @@ class SpeedUp(PowerUp):
     Implements the SpeedUp PowerUp
     """
 
-    sprite = ["*"]
-
     def __init__(self):
-        self.bgcolor = cl.Back.BLUE
-        self.fgcolor = cl.Fore.WHITE
+        pass
 
     def activate(self, activate):
         if activate:
-            self.visible = False
-            self.activated_time = container.SPEEDUP_LIFE
             self.activated = True
-            container.SCROLL_SPEED *= 2
+            self.usable_time = container.SPEEDUP_LIFE
+            container.SCROLL_SPEED *= 5
         else:
             self.activated = False
-            container.SCROLL_SPEED /= 2
+            container.SCROLL_SPEED /= 5
+
+    def respond_to_keypress(self, key):
+        if key == 'v' and self.refill_time == 0 and not self.activated:
+            self.activate(True)
 
 
 class Shield(PowerUp):
@@ -86,21 +77,20 @@ class Shield(PowerUp):
     Implements the Shield PowerUp
     """
 
-    sprite = ["+"]
-
     def __init__(self, player):
-        self.bgcolor = cl.Back.BLUE
-        self.fgcolor = cl.Fore.WHITE
         self.player = player
 
     def activate(self, activate):
         if activate:
-            self.visible = False
             self.activated = True
-            self.activated_time = container.SHIELD_LIFE
             self.player.bgcolor = cl.Back.GREEN
+            self.usable_time = container.SHIELD_LIFE
             container.SHEILD_UP = True
         else:
             self.activated = False
             self.player.bgcolor = cl.Back.RED
             container.SHEILD_UP = False
+
+    def respond_to_keypress(self, key):
+        if key == ' ' and self.refill_time == 0 and not self.activated:
+            self.activate(True)

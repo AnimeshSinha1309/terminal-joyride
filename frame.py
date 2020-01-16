@@ -12,15 +12,11 @@ import container
 class Frame:
     """
     Stores the Frame class with the following major attributes:
-    :property rows: number of rows in the rendered frame
-    :property cols: number of columns in the rendered frame
     :property text: image matrix - text part
     :property bgcolor: image matrix - background color part
     :property fgcolor: image matrix - foreground color part
     :property previous_render_time: last refresh time
     """
-    lives = 3
-    rows, cols = 24, 80
 
     def __init__(self):
         """
@@ -28,25 +24,28 @@ class Frame:
         """
         osmanager.hide_cursor()
         self.text = np.array(
-            [np.array([' ' for _ in range(self.cols)]) for _ in range(self.rows)])
+            [np.array([' ' for _ in range(container.FRAME_COLS)])
+             for _ in range(container.FRAME_ROWS)])
         self.bgcolor = np.array(
-            [np.array([cl.Back.CYAN for _ in range(self.cols)]) for _ in range(self.rows)])
+            [np.array([cl.Back.CYAN for _ in range(container.FRAME_COLS)])
+             for _ in range(container.FRAME_ROWS)])
         self.fgcolor = np.array(
-            [np.array([cl.Fore.WHITE for _ in range(self.cols)]) for _ in range(self.rows)])
+            [np.array([cl.Fore.WHITE for _ in range(container.FRAME_COLS)])
+             for _ in range(container.FRAME_ROWS)])
         self.previous_render_time = time.time()
 
     def render(self):
         """
         Renders the cached array onto the terminal
         """
-        for row in range(self.rows):
-            for col in range(self.cols):
+        for row in range(container.FRAME_ROWS):
+            for col in range(container.FRAME_COLS):
                 print(self.bgcolor[row][col] + self.fgcolor[row]
                       [col] + self.text[row][col], end='')
             print(cl.Style.RESET_ALL)
         self.previous_render_time = time.time()
-        print("Score: {0:4} | Lives: {1:2}".format(
-            container.SCORE, self.lives))
+        print("Score: {0:4} {2} Lives: {1:2}".format(
+            container.SCORE, container.LIVES, ' ' * 55))
 
     def draw_rect(self, row_limits: tuple, col_limits: tuple,
                   char='.', color: tuple = (cl.Back.CYAN, cl.Fore.WHITE)):
@@ -141,21 +140,23 @@ class Frame:
             if not item.delete_me:
                 item.update_on_timestep()
 
-    def in_frame_bounds(self, i: int, j: int):
+    @staticmethod
+    def in_frame_bounds(i: int, j: int):
         """
         Check if (i, j) is in frame
         :param i: row index
         :param j: col index
         :return: True if it is in, False otherwise
         """
-        return 0 <= i < self.rows and 0 <= j < self.cols
+        return 0 <= i < container.FRAME_ROWS and 0 <= j < container.FRAME_COLS
 
-    def player_die(self):
+    @staticmethod
+    def player_die():
         """
         Reduces the lives and moves to the exit sequence if lives = 0
         """
-        self.lives -= 1
-        if self.lives <= 0:
+        container.LIVES -= 1
+        if container.LIVES <= 0:
             container.exit_sequence(False)
 
 

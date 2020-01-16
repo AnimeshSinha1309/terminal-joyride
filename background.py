@@ -4,6 +4,7 @@ The background scenery that scrolls but does not interact with anything
 
 import colorama as cl
 from gameobject import GameObject
+import container
 
 
 class Background(GameObject):
@@ -30,7 +31,7 @@ class Background(GameObject):
         :param frame: the frame to print on
         :return:
         """
-        frame.draw_rect((0, frame.rows), (0, frame.cols),
+        frame.draw_rect((0, container.FRAME_ROWS), (0, container.FRAME_COLS),
                         ' ', color=(cl.Back.CYAN, cl.Fore.WHITE))
-        frame.draw_rect((frame.rows - 1, frame.rows), (0, frame.cols),
+        frame.draw_rect((container.FRAME_ROWS - 1, container.FRAME_ROWS), (0, container.FRAME_COLS),
                         ' ', color=(cl.Back.GREEN, cl.Fore.WHITE))
