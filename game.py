@@ -35,6 +35,10 @@ while True:
     if time.time() > FRAME.previous_render_time + 1 / (2 * FRAME_RATE):
         FRAME.broadcast_input([PLAYER, SHIELD, SPEEDUP])
     if time.time() > FRAME.previous_render_time + 1 / FRAME_RATE:
+        # Handle remaining time
+        container.TIME_REMAINING -= 1
+        if container.TIME_REMAINING <= 0:
+            container.exit_sequence(False)
         # Update and Render
         TIMESTEP += 1
         FRAME.broadcast_timestep(OBJECTS)

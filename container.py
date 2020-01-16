@@ -20,7 +20,8 @@ SPEEDUP_REFILL = 300
 
 SHEILD_UP = False
 SCORE = 0
-LIVES = 3
+LIVES = 10
+TIME_REMAINING = 2000
 
 
 def exit_sequence(won: bool):
