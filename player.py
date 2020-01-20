@@ -29,6 +29,7 @@ class Player(Person):
         self.fgcolor = cl.Fore.WHITE
         self.last_died = -10000
         self.bullets = []
+        self.velocity = 0
 
     def __str__(self):
         return "\n".join(self.sprite)
@@ -73,7 +74,10 @@ class Player(Person):
         """
         if self.delete_me:
             return
-        y_coord = min(self.position[0] + container.SCROLL_SPEED * 2, 20)
+        self.velocity += container.SCROLL_SPEED * 0.2
+        y_coord = min(self.position[0] + self.velocity, 20)
+        if y_coord >= 19.7:
+            self.velocity = 0
         self.position = (y_coord, self.position[1])
         for bullet in self.bullets:
             bullet.update_on_timestep()

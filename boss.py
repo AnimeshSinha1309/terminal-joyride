@@ -36,7 +36,7 @@ class Boss(Person):
                          container.FRAME_COLS)
         self.player = player
         self.bullets = []
-        self.lives = 50
+        self.lives = container.BOSS_LIVES
 
     def render_object(self, frame):
         """

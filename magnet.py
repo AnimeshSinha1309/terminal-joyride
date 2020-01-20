@@ -32,6 +32,7 @@ class Magnet(GameObject):
         """
         self.player.position = (0.8 * self.player.position[0] + 0.2 * self.position[0],
                                 0.8 * self.player.position[1] + 0.2 * self.position[1])
+        self.player.velocity = 0
 
     def update_on_timestep(self):
         """

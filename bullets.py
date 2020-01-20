@@ -19,7 +19,8 @@ class MyBullet(GameObject):
         self.position = (position[0] + 1, position[1] + 3)
 
     def update_on_timestep(self):
-        self.position = (self.position[0], self.position[1] + container.SCROLL_SPEED * 4)
+        self.position = (
+            self.position[0], self.position[1] + container.SCROLL_SPEED * 4)
         if self.position[1] > container.FRAME_COLS:
             self.delete_me = True
 
@@ -28,8 +29,8 @@ class MyBullet(GameObject):
 
     def detect_collision(self, other):
         for point in other.get_all_coordinates():
-            if 0 <= int(self.position[0]) - int(point[0]) < 2 and \
-                    0 <= int(self.position[1]) - int(point[1]) < 1:
+            if 0 <= int(self.position[0]) - int(point[0]) < 1 and \
+                    -3 <= int(self.position[1]) - int(point[1]) < 2:
                 return True
         return False
 
@@ -49,7 +50,8 @@ class EnemyBullet(GameObject):
         self.position = (position[0] + 5, position[1] - 3)
 
     def update_on_timestep(self):
-        self.position = (self.position[0], self.position[1] - container.SCROLL_SPEED * 8)
+        self.position = (
+            self.position[0], self.position[1] - container.SCROLL_SPEED * 8)
         if self.position[1] < 0:
             self.delete_me = True
 

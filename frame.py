@@ -100,8 +100,12 @@ class Frame:
                     continue
                 if image[i][j] != skip_char:
                     self.text[i + position[0]][j + position[1]] = cell
-                    self.bgcolor[i + position[0]][j + position[1]] = color[0]
-                    self.fgcolor[i + position[0]][j + position[1]] = color[1]
+                    if color[0] != "":
+                        self.bgcolor[i + position[0]
+                                     ][j + position[1]] = color[0]
+                    if color[1] != "":
+                        self.fgcolor[i + position[0]
+                                     ][j + position[1]] = color[1]
 
     @staticmethod
     def broadcast_input(objects):
