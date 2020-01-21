@@ -15,14 +15,14 @@ class Boss(Person):
     Final Boss of the game, he follows you around and shoots at you
     """
 
-    bgcolor = cl.Back.BLACK
-    fgcolor = cl.Fore.RED
+    _bgcolor = cl.Back.BLACK
+    _fgcolor = cl.Fore.RED
 
     def __init__(self, player: Player):
         """
-        Initialize the boss with the sprite, colors and player to follow
+        Initialize the boss with the _sprite, colors and player to follow
         """
-        self.sprite = [
+        self._sprite = [
             "&&&&.----.__ &",
             "&&&/---.__  \\&",
             "&&/       `\\ |",
@@ -43,9 +43,9 @@ class Boss(Person):
         Implement the way to render on the screen cache
         :param frame: the frame to print on
         """
-        if not self.delete_me:
+        if not self._delete_me:
             frame.draw_sprite((int(self.position[0]), int(self.position[1])),
-                              self.sprite, '&', (self.bgcolor, self.fgcolor))
+                              self._sprite, '&', (self._bgcolor, self._fgcolor))
             for bullet in self.bullets:
                 bullet.render_object(frame)
 
@@ -60,7 +60,7 @@ class Boss(Person):
         """
         Move the boss into the frame and then make him track the player
         """
-        if self.position[1] > container.FRAME_COLS - len(self.sprite[0]) - 2:
+        if self.position[1] > container.FRAME_COLS - len(self._sprite[0]) - 2:
             self.position = (
                 self.position[0], self.position[1] - container.SCROLL_SPEED)
         else:
@@ -74,7 +74,7 @@ class Boss(Person):
                     max(self.position[0] - container.SCROLL_SPEED / 5, 0), self.position[1])
             if self.player.position[0] > self.position[0]:
                 self.position = (min(self.position[0] + container.SCROLL_SPEED / 5,
-                                     container.FRAME_ROWS - len(self.sprite)),
+                                     container.FRAME_ROWS - len(self._sprite)),
                                  self.position[1])
 
     def shoot_bullet(self):
@@ -87,5 +87,5 @@ class Boss(Person):
         self.lives -= 1
         if self.lives <= 0:
             container.SCORE += 100
-            self.delete_me = True
+            self._delete_me = True
             container.exit_sequence(True)

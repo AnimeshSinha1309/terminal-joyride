@@ -13,16 +13,16 @@ class MyBullet(GameObject):
     """
 
     def __init__(self, position):
-        self.sprite = ["=>"]
-        self.bgcolor = cl.Back.WHITE
-        self.fgcolor = cl.Fore.RED
+        self._sprite = ["=>"]
+        self._bgcolor = cl.Back.WHITE
+        self._fgcolor = cl.Fore.RED
         self.position = (position[0] + 1, position[1] + 3)
 
     def update_on_timestep(self):
         self.position = (
             self.position[0], self.position[1] + container.SCROLL_SPEED * 4)
         if self.position[1] > container.FRAME_COLS:
-            self.delete_me = True
+            self._delete_me = True
 
     def respond_to_keypress(self, key):
         return
@@ -41,19 +41,19 @@ class EnemyBullet(GameObject):
     """
 
     def __init__(self, position):
-        self.sprite = [
+        self._sprite = [
             "/==",
             "\\=="
         ]
-        self.bgcolor = cl.Back.WHITE
-        self.fgcolor = cl.Fore.RED
+        self._bgcolor = cl.Back.WHITE
+        self._fgcolor = cl.Fore.RED
         self.position = (position[0] + 5, position[1] - 3)
 
     def update_on_timestep(self):
         self.position = (
             self.position[0], self.position[1] - container.SCROLL_SPEED * 8)
         if self.position[1] < 0:
-            self.delete_me = True
+            self._delete_me = True
 
     def respond_to_keypress(self, key):
         return

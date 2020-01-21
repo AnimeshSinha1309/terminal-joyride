@@ -12,10 +12,10 @@ import container
 class Frame:
     """
     Stores the Frame class with the following major attributes:
-    :property text: image matrix - text part
-    :property bgcolor: image matrix - background color part
-    :property fgcolor: image matrix - foreground color part
-    :property previous_render_time: last refresh time
+    :property _text: image matrix - text part
+    :property _bgcolor: image matrix - background color part
+    :property _fgcolor: image matrix - foreground color part
+    :property _previous_render_time: last refresh time
     """
 
     def __init__(self):
@@ -23,16 +23,16 @@ class Frame:
         Initialize the rendering frame
         """
         osmanager.hide_cursor()
-        self.text = np.array(
+        self._text = np.array(
             [np.array([' ' for _ in range(container.FRAME_COLS)])
              for _ in range(container.FRAME_ROWS)])
-        self.bgcolor = np.array(
+        self._bgcolor = np.array(
             [np.array([cl.Back.CYAN for _ in range(container.FRAME_COLS)])
              for _ in range(container.FRAME_ROWS)])
-        self.fgcolor = np.array(
+        self._fgcolor = np.array(
             [np.array([cl.Fore.WHITE for _ in range(container.FRAME_COLS)])
              for _ in range(container.FRAME_ROWS)])
-        self.previous_render_time = time.time()
+        self._previous_render_time = time.time()
 
     def render(self):
         """
@@ -40,10 +40,10 @@ class Frame:
         """
         for row in range(container.FRAME_ROWS):
             for col in range(container.FRAME_COLS):
-                print(self.bgcolor[row][col] + self.fgcolor[row]
-                      [col] + self.text[row][col], end='')
+                print(self._bgcolor[row][col] + self._fgcolor[row]
+                      [col] + self._text[row][col], end='')
             print(cl.Style.RESET_ALL)
-        self.previous_render_time = time.time()
+        self._previous_render_time = time.time()
         print("Score: {0:4} {3} Lives: {1:2} {3} Time Remaining: {2:4}".format(
             container.SCORE, container.LIVES, container.TIME_REMAINING // 10, ' ' * 18))
 
@@ -60,9 +60,9 @@ class Frame:
             for j in range(col_limits[0], col_limits[1]):
                 if not self.in_frame_bounds(i, j):
                     continue
-                self.text[i][j] = char
-                self.bgcolor[i][j] = color[0]
-                self.fgcolor[i][j] = color[1]
+                self._text[i][j] = char
+                self._bgcolor[i][j] = color[0]
+                self._fgcolor[i][j] = color[1]
 
     def draw_ellipse(self, center: tuple, radius: tuple,
                      char='.', color: tuple = (cl.Back.BLACK, cl.Fore.WHITE)):
@@ -78,9 +78,9 @@ class Frame:
                 if not self.in_frame_bounds(i, j):
                     continue
                 if ((center[0] - i) / radius[0]) ** 2 + ((center[1] - j) / radius[1]) ** 2 <= 1:
-                    self.text[i][j] = char
-                    self.bgcolor[i][j] = color[0]
-                    self.fgcolor[i][j] = color[1]
+                    self._text[i][j] = char
+                    self._bgcolor[i][j] = color[0]
+                    self._fgcolor[i][j] = color[1]
 
     def draw_sprite(self, position: tuple, image: list, skip_char: str = ' ',
                     color: tuple = (cl.Back.BLACK, cl.Fore.WHITE)):
@@ -99,13 +99,13 @@ class Frame:
                         not self.in_frame_bounds(i + position[0], j + position[1]):
                     continue
                 if image[i][j] != skip_char:
-                    self.text[i + position[0]][j + position[1]] = cell
+                    self._text[i + position[0]][j + position[1]] = cell
                     if color[0] != "":
-                        self.bgcolor[i + position[0]
-                                     ][j + position[1]] = color[0]
+                        self._bgcolor[i + position[0]
+                                      ][j + position[1]] = color[0]
                     if color[1] != "":
-                        self.fgcolor[i + position[0]
-                                     ][j + position[1]] = color[1]
+                        self._fgcolor[i + position[0]
+                                      ][j + position[1]] = color[1]
 
     @staticmethod
     def broadcast_input(objects):
@@ -162,6 +162,17 @@ class Frame:
         container.LIVES -= 1
         if container.LIVES <= 0:
             container.exit_sequence(False)
+
+    @property
+    def previous_render_time(self):
+        """
+        Defines as a property the last time the frame was rendered to set the frame rate.
+        """
+        return self._previous_render_time
+
+    @previous_render_time.setter
+    def previous_render_time(self, new_value):
+        self._previous_render_time = new_value
 
 
 if __name__ == '__main__':

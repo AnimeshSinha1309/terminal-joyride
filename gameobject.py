@@ -18,14 +18,14 @@ class GameObject(ABC):
     * render_object(frame)
     """
 
-    sprite = ""
+    _sprite = ""
     position = (0, 0)
-    bgcolor = cl.Back.BLACK
-    fgcolor = cl.Fore.WHITE
-    delete_me = False
+    _bgcolor = cl.Back.BLACK
+    _fgcolor = cl.Fore.WHITE
+    _delete_me = False
 
     def __str__(self):
-        return "\n".join(self.sprite)
+        return "\n".join(self._sprite)
 
     def respond_to_keypress(self, key):
         """
@@ -48,7 +48,7 @@ class GameObject(ABC):
         :return: list of tuples (i, j), coordinates where the firebeam is present
         """
         return [(int(i + self.position[0]), int(j + self.position[1]))
-                for i, row in enumerate(self.sprite)
+                for i, row in enumerate(self._sprite)
                 for j, cell in enumerate(row)
                 if cell != ' ']
 
@@ -67,6 +67,17 @@ class GameObject(ABC):
         :param frame: the frame to print on
         :return:
         """
-        if not self.delete_me:
+        if not self._delete_me:
             frame.draw_sprite((int(self.position[0]), int(self.position[1])),
-                              self.sprite, ' ', (self.bgcolor, self.fgcolor))
+                              self._sprite, ' ', (self._bgcolor, self._fgcolor))
+
+    @property
+    def delete_me(self):
+        """
+        Property that marks the object for deletion
+        """
+        return self._delete_me
+
+    @delete_me.setter
+    def delete_me(self, new_value):
+        self._delete_me = new_value

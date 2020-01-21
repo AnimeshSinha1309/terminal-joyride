@@ -14,9 +14,9 @@ class Coin(Spawnable):
     """
 
     def __init__(self, position: tuple):
-        self.sprite = ["$"]
-        self.fgcolor = cl.Fore.YELLOW
-        self.bgcolor = ""
+        self._sprite = ["$"]
+        self._fgcolor = cl.Fore.YELLOW
+        self._bgcolor = ""
         self.position = position
 
     @staticmethod
@@ -35,5 +35,6 @@ class Coin(Spawnable):
             self.position[0], self.position[1] - container.SCROLL_SPEED)
 
     def detect_collision(self, other):
-        val = (int(self.position[0]), int(self.position[1])) in other.get_all_coordinates()
+        val = (int(self.position[0]), int(
+            self.position[1])) in other.get_all_coordinates()
         return val

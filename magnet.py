@@ -13,16 +13,17 @@ class Magnet(GameObject):
     Draws the magnet that appears once in the game
     """
 
+    position = (np.random.randint(0, container.FRAME_ROWS),
+                np.random.randint(0, container.FRAME_COLS))
+    _sprite = [
+        "===",
+        "| |",
+        "| |"
+    ]
+    _fgcolor = cl.Fore.RED
+    _bgcolor = cl.Back.BLACK
+
     def __init__(self, player: GameObject):
-        self.sprite = [
-            "===",
-            "| |",
-            "| |"
-        ]
-        self.position = (np.random.randint(0, container.FRAME_ROWS),
-                         np.random.randint(0, container.FRAME_COLS))
-        self.fgcolor = cl.Fore.RED
-        self.bgcolor = cl.Back.BLACK
         self.player = player
         self.time_elapsed = 0
 
@@ -41,7 +42,7 @@ class Magnet(GameObject):
         self.magnet_pull()
         self.time_elapsed += 1
         if self.time_elapsed > container.MAGNET_LIFE:
-            self.delete_me = True
+            self._delete_me = True
 
     def respond_to_keypress(self, key):
         return

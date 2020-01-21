@@ -13,21 +13,21 @@ class PowerUp(GameObject):
     Does not get rendered, just accepts keygrabs
     """
 
-    activated = False
-    refill_time = 0
-    usable_time = 0
+    _activated = False
+    _refill_time = 0
+    _usable_time = 0
 
     def update_on_timestep(self):
-        if self.activated:
-            if self.usable_time > 0:
-                self.usable_time -= 1
+        if self._activated:
+            if self._usable_time > 0:
+                self._usable_time -= 1
             else:
-                self.activated = False
+                self._activated = False
                 self.activate(False)
-                self.refill_time = container.SHIELD_REFILL
-        elif not self.activated:
-            if self.refill_time > 0:
-                self.refill_time -= 1
+                self._refill_time = container.SHIELD_REFILL
+        elif not self._activated:
+            if self._refill_time > 0:
+                self._refill_time -= 1
 
     def render_object(self, frame):
         pass
@@ -60,15 +60,15 @@ class SpeedUp(PowerUp):
 
     def activate(self, activate):
         if activate:
-            self.activated = True
-            self.usable_time = container.SPEEDUP_LIFE
+            self._activated = True
+            self._usable_time = container.SPEEDUP_LIFE
             container.SCROLL_SPEED *= 5
         else:
-            self.activated = False
+            self._activated = False
             container.SCROLL_SPEED /= 5
 
     def respond_to_keypress(self, key):
-        if key == 'v' and self.refill_time == 0 and not self.activated:
+        if key == 'v' and self._refill_time == 0 and not self._activated:
             self.activate(True)
 
 
@@ -82,15 +82,15 @@ class Shield(PowerUp):
 
     def activate(self, activate):
         if activate:
-            self.activated = True
+            self._activated = True
             self.player.bgcolor = cl.Back.GREEN
-            self.usable_time = container.SHIELD_LIFE
+            self._usable_time = container.SHIELD_LIFE
             container.SHEILD_UP = True
         else:
-            self.activated = False
+            self._activated = False
             self.player.bgcolor = cl.Back.RED
             container.SHEILD_UP = False
 
     def respond_to_keypress(self, key):
-        if key == ' ' and self.refill_time == 0 and not self.activated:
+        if key == ' ' and self._refill_time == 0 and not self._activated:
             self.activate(True)

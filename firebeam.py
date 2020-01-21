@@ -14,12 +14,12 @@ class FireBeam(Spawnable):
     """
 
     def __init__(self):
-        self.type = np.random.choice(
+        self._type = np.random.choice(
             ['Vertical', 'Horizontal', 'LeftDiagonal', 'RightDiagonal'])
-        self.bgcolor = cl.Back.YELLOW
-        self.fgcolor = cl.Fore.BLACK
-        if self.type == 'Vertical':
-            self.sprite = [
+        self._bgcolor = cl.Back.YELLOW
+        self._fgcolor = cl.Fore.BLACK
+        if self._type == 'Vertical':
+            self._sprite = [
                 "X",
                 "X",
                 "X",
@@ -27,14 +27,14 @@ class FireBeam(Spawnable):
             ]
             self.position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 4), container.FRAME_COLS)
-        elif self.type == 'Horizontal':
-            self.sprite = [
+        elif self._type == 'Horizontal':
+            self._sprite = [
                 "XXXX"
             ]
             self.position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 1), container.FRAME_COLS)
-        elif self.type == 'LeftDiagonal':
-            self.sprite = [
+        elif self._type == 'LeftDiagonal':
+            self._sprite = [
                 "X   ",
                 " X  ",
                 "  X ",
@@ -42,8 +42,8 @@ class FireBeam(Spawnable):
             ]
             self.position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 4), container.FRAME_COLS)
-        elif self.type == 'RightDiagonal':
-            self.sprite = [
+        elif self._type == 'RightDiagonal':
+            self._sprite = [
                 "   X",
                 "  X ",
                 " X  ",
@@ -53,19 +53,19 @@ class FireBeam(Spawnable):
                 container.FRAME_ROWS + 1 - 4), container.FRAME_COLS)
 
     def __str__(self):
-        return "\n".join(self.sprite)
+        return "\n".join(self._sprite)
 
     def update_on_timestep(self):
         """
         Move the obstacle to the right in every frame
         :return: False if it's supposed to be deleted, True otherwise
         """
-        if self.delete_me:
+        if self._delete_me:
             return
         self.position = (
             self.position[0], self.position[1] - container.SCROLL_SPEED)
         if self.position[0] < -4:
-            self.delete_me = True
+            self._delete_me = True
 
     @staticmethod
     def spawn(prob: float = 1/50):
