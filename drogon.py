@@ -4,6 +4,7 @@ Implement our friendly Dragon
 
 import math
 import numpy as np
+import colorama as cl
 from gameobject import GameObject
 
 
@@ -45,11 +46,22 @@ class Drogon(GameObject):
         self._draw_head(img, coord[0], coord[1], head_size, '>')
         return img
 
+    def __init__(self):
+        self.position = (4, -30)
+        self.offset = 0
+        self.bgcolor = cl.Back.RED
+        self.fgcolor = cl.Fore.WHITE
+
     def render_object(self, frame):
-        pass
+        if not self.delete_me:
+            img = self.draw_img(6, 30, int(self.offset))
+            sprite = ["".join(line) for line in img]
+            frame.draw_sprite(self.position, sprite,
+                              color=(self.bgcolor, self.fgcolor))
 
     def update_on_timestep(self):
-        pass
+        self.offset += 0.1
+        self.position = (self.position[0], min(self.position[1] + 1, 10))
 
     def respond_to_keypress(self, key):
         pass

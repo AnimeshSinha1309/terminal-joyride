@@ -11,6 +11,7 @@ from firebeam import FireBeam
 from boss import Boss
 from magnet import Magnet
 from coins import Coin
+from drogon import Drogon
 import container
 from power_up import SpeedUp, Shield
 
@@ -65,8 +66,13 @@ while True:
                 if isinstance(obj, FireBeam) and obj.detect_collision(PLAYER):
                     FRAME.player_die()
                     PLAYER.last_died = TIMESTEP
-        # Initialize the Boss Enemy
-        if TIMESTEP == container.ENDGAME_TIME + 5:
+        # Initialize the Boss Enemy and Our Dragon
+        if TIMESTEP == container.ENDGAME_TIME + container.DROGON_DELAY:
+            DROGON = Drogon()
+            OBJECTS.append(DROGON)
+        if TIMESTEP == container.ENDGAME_TIME + container.DROGON_DELAY + container.DROGON_LIFE:
+            DROGON.delete_me = True
+        if TIMESTEP == container.ENDGAME_TIME + container.BOSS_DELAY:
             BOSS = Boss(PLAYER)
             OBJECTS.append(BOSS)
         # Check the bullet shootings

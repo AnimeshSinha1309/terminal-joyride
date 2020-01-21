@@ -18,16 +18,16 @@ class Player(Person):
     :property Velocity: int, velocity
     """
 
+    position = (20, 4)
+    sprite = [
+        " O ",
+        "/|\\",
+        "/ \\"
+    ]
+    bgcolor = cl.Back.RED
+    fgcolor = cl.Fore.WHITE
+
     def __init__(self):
-        self.position = (20, 4)
-        self.sprite = [
-            " O ",
-            "/|\\",
-            "/ \\"
-        ]
-        self.bgcolor = cl.Back.RED
-        self.fgcolor = cl.Fore.WHITE
-        self.last_died = -10000
         self.bullets = []
         self.velocity = 0
 
