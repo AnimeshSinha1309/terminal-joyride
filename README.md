@@ -24,6 +24,7 @@ python3 game.py
   * People
     * Player
     * Boss Enemy
+    * Drogon
   * Spawnable
     * Fire Beams
     * Magnet
@@ -33,4 +34,3 @@ python3 game.py
   * Powerups
     * Speed Power-Up
     * Shield Power-Up
-
