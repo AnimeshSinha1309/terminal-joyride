@@ -82,30 +82,30 @@ class Frame:
                     self._bgcolor[i][j] = color[0]
                     self._fgcolor[i][j] = color[1]
 
-    def draw_sprite(self, position: tuple, image: list, skip_char: str = ' ',
+    def draw_sprite(self, _position: tuple, image: list, skip_char: str = ' ',
                     color: tuple = (cl.Back.BLACK, cl.Fore.WHITE)):
         """
         Draws the sprite on the game frame which is passed in as an array of strings
-        :param position: pair of (row position, col position) for the top-left corner
+        :param _position: pair of (row _position, col _position) for the top-left corner
         :param image: array of strings that represent the image to be drawn
         :param skip_char: char, the character that is not a part of the sprite, so don't color it
         :param color: pair of Background color and Foreground color
         """
         assert not image or isinstance(image[0], str)
-        assert len(position) == 2 and len(skip_char) == 1
+        assert len(_position) == 2 and len(skip_char) == 1
         for i, _ in enumerate(image):
             for j, cell in enumerate(image[i]):
                 if not self.in_frame_bounds(i, j) or \
-                        not self.in_frame_bounds(i + position[0], j + position[1]):
+                        not self.in_frame_bounds(i + _position[0], j + _position[1]):
                     continue
                 if image[i][j] != skip_char:
-                    self._text[i + position[0]][j + position[1]] = cell
+                    self._text[i + _position[0]][j + _position[1]] = cell
                     if color[0] != "":
-                        self._bgcolor[i + position[0]
-                                      ][j + position[1]] = color[0]
+                        self._bgcolor[i + _position[0]
+                                      ][j + _position[1]] = color[0]
                     if color[1] != "":
-                        self._fgcolor[i + position[0]
-                                      ][j + position[1]] = color[1]
+                        self._fgcolor[i + _position[0]
+                                      ][j + _position[1]] = color[1]
 
     @staticmethod
     def broadcast_input(objects):

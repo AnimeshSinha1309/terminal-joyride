@@ -12,6 +12,8 @@ class Person(GameObject):
     by Player and Enemy Boss
     """
 
+    _bullets = []
+
     def render_object(self, frame):
         raise NotImplementedError
 
@@ -26,3 +28,10 @@ class Person(GameObject):
         Functional interface to shoot bullets out
         """
         raise NotImplementedError
+
+    @property
+    def bullets(self):
+        """
+        Returns the list of bullets that the person has shot
+        """
+        return self._bullets

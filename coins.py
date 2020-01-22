@@ -13,11 +13,11 @@ class Coin(Spawnable):
     Random coins for scoring points
     """
 
-    def __init__(self, position: tuple):
+    def __init__(self, _position: tuple):
         self._sprite = ["$"]
         self._fgcolor = cl.Fore.YELLOW
         self._bgcolor = ""
-        self.position = position
+        self._position = _position
 
     @staticmethod
     def spawn(prob: float = 1/500):
@@ -31,10 +31,10 @@ class Coin(Spawnable):
                 for col in range(0, size[1] - 1)]
 
     def update_on_timestep(self):
-        self.position = (
-            self.position[0], self.position[1] - container.SCROLL_SPEED)
+        self._position = (
+            self._position[0], self._position[1] - container.SCROLL_SPEED)
 
     def detect_collision(self, other):
-        val = (int(self.position[0]), int(
-            self.position[1])) in other.get_all_coordinates()
+        val = (int(self._position[0]), int(
+            self._position[1])) in other.get_all_coordinates()
         return val

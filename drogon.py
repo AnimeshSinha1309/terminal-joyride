@@ -47,7 +47,7 @@ class Drogon(GameObject):
         return img
 
     def __init__(self):
-        self.position = (4, -30)
+        self._position = (4, -30)
         self._offset = 0
         self._bgcolor = cl.Back.RED
         self._fgcolor = cl.Fore.WHITE
@@ -56,12 +56,12 @@ class Drogon(GameObject):
         if not self._delete_me:
             img = self.draw_img(6, 30, int(self._offset))
             _sprite = ["".join(line) for line in img]
-            frame.draw_sprite(self.position, _sprite,
+            frame.draw_sprite(self._position, _sprite,
                               color=(self._bgcolor, self._fgcolor))
 
     def update_on_timestep(self):
         self._offset += 0.1
-        self.position = (self.position[0], min(self.position[1] + 1, 10))
+        self._position = (self._position[0], min(self._position[1] + 1, 10))
 
     def respond_to_keypress(self, key):
         pass

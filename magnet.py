@@ -13,8 +13,8 @@ class Magnet(GameObject):
     Draws the magnet that appears once in the game
     """
 
-    position = (np.random.randint(0, container.FRAME_ROWS),
-                np.random.randint(0, container.FRAME_COLS))
+    _position = (np.random.randint(0, container.FRAME_ROWS),
+                 np.random.randint(0, container.FRAME_COLS))
     _sprite = [
         "===",
         "| |",

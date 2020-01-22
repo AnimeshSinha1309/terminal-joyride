@@ -19,7 +19,7 @@ class GameObject(ABC):
     """
 
     _sprite = ""
-    position = (0, 0)
+    _position = (0, 0)
     _bgcolor = cl.Back.BLACK
     _fgcolor = cl.Fore.WHITE
     _delete_me = False
@@ -47,7 +47,7 @@ class GameObject(ABC):
         Returns all coordinates where the firebeam is present (can collide)
         :return: list of tuples (i, j), coordinates where the firebeam is present
         """
-        return [(int(i + self.position[0]), int(j + self.position[1]))
+        return [(int(i + self._position[0]), int(j + self._position[1]))
                 for i, row in enumerate(self._sprite)
                 for j, cell in enumerate(row)
                 if cell != ' ']
@@ -68,7 +68,7 @@ class GameObject(ABC):
         :return:
         """
         if not self._delete_me:
-            frame.draw_sprite((int(self.position[0]), int(self.position[1])),
+            frame.draw_sprite((int(self._position[0]), int(self._position[1])),
                               self._sprite, ' ', (self._bgcolor, self._fgcolor))
 
     @property
@@ -81,3 +81,14 @@ class GameObject(ABC):
     @delete_me.setter
     def delete_me(self, new_value):
         self._delete_me = new_value
+
+    @property
+    def position(self):
+        """
+        Property that denotes the position of an object
+        """
+        return self._position
+
+    @position.setter
+    def position(self, new_value):
+        self._position = new_value

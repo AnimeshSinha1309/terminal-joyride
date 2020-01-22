@@ -25,13 +25,13 @@ class FireBeam(Spawnable):
                 "X",
                 "X"
             ]
-            self.position = (np.random.randint(
+            self._position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 4), container.FRAME_COLS)
         elif self._type == 'Horizontal':
             self._sprite = [
                 "XXXX"
             ]
-            self.position = (np.random.randint(
+            self._position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 1), container.FRAME_COLS)
         elif self._type == 'LeftDiagonal':
             self._sprite = [
@@ -40,7 +40,7 @@ class FireBeam(Spawnable):
                 "  X ",
                 "   X"
             ]
-            self.position = (np.random.randint(
+            self._position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 4), container.FRAME_COLS)
         elif self._type == 'RightDiagonal':
             self._sprite = [
@@ -49,7 +49,7 @@ class FireBeam(Spawnable):
                 " X  ",
                 "X   "
             ]
-            self.position = (np.random.randint(
+            self._position = (np.random.randint(
                 container.FRAME_ROWS + 1 - 4), container.FRAME_COLS)
 
     def __str__(self):
@@ -62,9 +62,9 @@ class FireBeam(Spawnable):
         """
         if self._delete_me:
             return
-        self.position = (
-            self.position[0], self.position[1] - container.SCROLL_SPEED)
-        if self.position[0] < -4:
+        self._position = (
+            self._position[0], self._position[1] - container.SCROLL_SPEED)
+        if self._position[0] < -4:
             self._delete_me = True
 
     @staticmethod

@@ -18,7 +18,7 @@ class Player(Person):
     :property _velocity: int, _velocity
     """
 
-    position = (20, 4)
+    _position = (20, 4)
     _sprite = [
         " O ",
         "/|\\",
@@ -28,7 +28,7 @@ class Player(Person):
     _fgcolor = cl.Fore.WHITE
 
     def __init__(self):
-        self.bullets = []
+        self._bullets = []
         self._velocity = 0
         self.last_died = -1000
 
@@ -43,9 +43,9 @@ class Player(Person):
         """
         if self._delete_me:
             return
-        frame.draw_sprite((int(self.position[0]), int(self.position[1])),
+        frame.draw_sprite((int(self._position[0]), int(self._position[1])),
                           self._sprite, ' ', (self._bgcolor, self._fgcolor))
-        for bullet in self.bullets:
+        for bullet in self._bullets:
             bullet.render_object(frame)
 
     def respond_to_keypress(self, key):
@@ -57,16 +57,17 @@ class Player(Person):
         if self._delete_me:
             return
         if key == 'a':
-            self.position = (self.position[0], max(self.position[1] - 1, 2))
+            self._position = (self._position[0], max(self._position[1] - 1, 2))
         elif key == 'd':
-            self.position = (self.position[0], min(self.position[1] + 1, 60))
+            self._position = (self._position[0], min(
+                self._position[1] + 1, 60))
         elif key == 'w':
-            self.position = (max(self.position[0] - 3, 1), self.position[1])
+            self._position = (max(self._position[0] - 3, 1), self._position[1])
         elif key == 'f':
-            self.bullets.append(MyBullet(self.position))
+            self._bullets.append(MyBullet(self._position))
 
     def shoot_bullet(self):
-        self.bullets.append(MyBullet(self.position))
+        self._bullets.append(MyBullet(self._position))
 
     def update_on_timestep(self):
         """
@@ -76,11 +77,11 @@ class Player(Person):
         if self._delete_me:
             return
         self._velocity += container.SCROLL_SPEED * 0.2
-        y_coord = min(self.position[0] + self._velocity, 20)
+        y_coord = min(self._position[0] + self._velocity, 20)
         if y_coord >= 19.7:
             self._velocity = 0
-        self.position = (y_coord, self.position[1])
-        for bullet in self.bullets:
+        self._position = (y_coord, self._position[1])
+        for bullet in self._bullets:
             bullet.update_on_timestep()
 
     @property
