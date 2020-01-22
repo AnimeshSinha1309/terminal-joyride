@@ -5,10 +5,11 @@ Implement our friendly Dragon
 import math
 import numpy as np
 import colorama as cl
-from gameobject import GameObject
+from person import Person
+from bullets import MyBullet
 
 
-class Drogon(GameObject):
+class Drogon(Person):
     """
     Implements the wavy dragon, just the display part
     """
@@ -51,6 +52,7 @@ class Drogon(GameObject):
         self._offset = 0
         self._bgcolor = cl.Back.RED
         self._fgcolor = cl.Fore.WHITE
+        self.__wait_to_shoot = 100
 
     def render_object(self, frame):
         if not self._delete_me:
@@ -58,10 +60,23 @@ class Drogon(GameObject):
             _sprite = ["".join(line) for line in img]
             frame.draw_sprite(self._position, _sprite,
                               color=(self._bgcolor, self._fgcolor))
+            for bullet in self._bullets:
+                bullet.render_object(frame)
 
     def update_on_timestep(self):
         self._offset += 0.1
-        self._position = (self._position[0], min(self._position[1] + 1, 10))
+        self._position = (self._position[0], min(self._position[1] + 1, 0))
+        self.__wait_to_shoot -= 1
+        if self.__wait_to_shoot == 0:
+            self.shoot_bullet()
+            self.__wait_to_shoot = 5
+        for bullet in self._bullets:
+            bullet.update_on_timestep()
+
+    def shoot_bullet(self):
+        if self.position[1] >= 0:
+            self._bullets.append(
+                MyBullet((self._position[0] + 3, self.position[1] + 30)))
 
     def respond_to_keypress(self, key):
         pass

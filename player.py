@@ -26,11 +26,12 @@ class Player(Person):
     ]
     _bgcolor = cl.Back.RED
     _fgcolor = cl.Fore.WHITE
+    _bullets = []
 
     def __init__(self):
-        self._bullets = []
         self._velocity = 0
         self.last_died = -1000
+        self.__inactive_sprite = False
 
     def __str__(self):
         return "\n".join(self._sprite)
@@ -41,7 +42,7 @@ class Player(Person):
         :param frame: the frame to print on
         :return:
         """
-        if self._delete_me:
+        if self._delete_me or self.__inactive_sprite:
             return
         frame.draw_sprite((int(self._position[0]), int(self._position[1])),
                           self._sprite, ' ', (self._bgcolor, self._fgcolor))
@@ -54,7 +55,7 @@ class Player(Person):
         :param key: the key that was pressed
         :return:
         """
-        if self._delete_me:
+        if self._delete_me or self.__inactive_sprite:
             return
         if key == 'a':
             self._position = (self._position[0], max(self._position[1] - 1, 2))
@@ -105,6 +106,15 @@ class Player(Person):
     @velocity.setter
     def velocity(self, new_velocity):
         self._velocity = new_velocity
+
+    def delete_sprite(self, delete):
+        """
+        Delete this sprite as Drogon is present
+        """
+        if delete:
+            self.__inactive_sprite = True
+        else:
+            self.__inactive_sprite = False
 
 
 if __name__ == '__main__':

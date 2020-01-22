@@ -17,14 +17,20 @@ python3 game.py
 
 ## Class Structure
 
+* Frame
+* OS manager
 * GameObject
+  * Background
   * People
     * Player
-    * Enemy
-  * Object
-    * Obstacles
-    * Powerups
-* GameWindow
-  * RenderFrame
-  * Keylogger
+    * Boss Enemy
+  * Spawnable
+    * Fire Beams
+    * Magnet
+  * Bullets
+    * My Bullets
+    * Boss Bullets
+  * Powerups
+    * Speed Power-Up
+    * Shield Power-Up
 

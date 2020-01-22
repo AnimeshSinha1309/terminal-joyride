@@ -35,3 +35,7 @@ class Person(GameObject):
         Returns the list of bullets that the person has shot
         """
         return self._bullets
+
+    @bullets.setter
+    def bullets(self, new_array):
+        self._bullets = new_array

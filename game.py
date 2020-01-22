@@ -14,6 +14,7 @@ from coins import Coin
 from drogon import Drogon
 import container
 from power_up import SpeedUp, Shield
+import garbage_collector
 
 FRAME_RATE = 16
 
@@ -70,8 +71,10 @@ while True:
         if TIMESTEP == container.ENDGAME_TIME + container.DROGON_DELAY:
             DROGON = Drogon()
             OBJECTS.append(DROGON)
+            PLAYER.delete_sprite(True)
         if TIMESTEP == container.ENDGAME_TIME + container.DROGON_DELAY + container.DROGON_LIFE:
             DROGON.delete_me = True
+            PLAYER.delete_sprite(False)
         if TIMESTEP == container.ENDGAME_TIME + container.BOSS_DELAY:
             BOSS = Boss(PLAYER)
             OBJECTS.append(BOSS)
@@ -96,3 +99,10 @@ while True:
         if TIMESTEP == container.MAGNET_TIME:
             MAGNET = Magnet(PLAYER)
             OBJECTS.append(MAGNET)
+
+    # Clear out the Garbage
+    if time.time() > garbage_collector.LAST_RUN_TIME + 10:
+        OBJECTS = garbage_collector.garbage_collect(OBJECTS)
+        PLAYER.bullets = garbage_collector.garbage_collect(PLAYER.bullets)
+        if BOSS is not None:
+            BOSS.bullets = garbage_collector.garbage_collect(BOSS.bullets)
